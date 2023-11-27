@@ -1,0 +1,292 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+a {
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+
+.underline_link {
+    text-decoration: underline;
+}
+
+.container {
+    height: 100%;
+    max-width: 1440px;
+    padding: 0 110px;
+    margin: 0 auto;
+}
+
+html {
+    min-height: 100% !important;
+    height: 100%;
+}
+
+img {
+    width: 100%;
+    background-color: #fdbead;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #fef7f6;
+    color: #181818;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.button {
+    background-color: #fdbead;
+    border-radius: 8px;
+    border: none;
+    min-height: 55px;
+    font-weight: 400;
+}
+
+.inner {
+    padding: 92px 0 0 0;
+}
+
+.heading {
+    margin-left: 330px;
+    font-size: clamp(1.5rem, 2.22vw, 2rem);
+    margin-bottom: 93px;
+}
+
+.box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1220px;
+    align-items: flex-start;
+}
+
+.message {
+    background-color: #bc2c1a;
+    border-radius: 40px;
+    padding: 35px;
+    position: relative;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.message img {
+    background: transparent;
+}
+
+.message .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+}
+
+.message ul,
+.message li {
+    list-style: inherit;
+    padding: inherit;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.green {
+    background-color: #679436;
+}
+
+.therapies__top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.therapies__top-button {
+    height: 38px;
+    background-color: #6483f0;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border-radius: 17px;
+    font-size: 14px;
+}
+
+@font-face {
+    font-family: "";
+    src: url();
+}
+
+.header {
+    flex: 0 0 auto;
+    min-height: 68px;
+    height: 1px;
+    border-bottom: 2px solid #6483f0;
+}
+
+.header__inner {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 153px;
+}
+
+.header__logo {
+    height: 100%;
+    font-family: "Paytone One", Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    color: #fdbead;
+}
+
+.header__logo-span {
+    color: #6483f0;
+}
+
+.header .nav {
+    display: flex;
+    width: 100%;
+    max-width: 890px;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.header .nav .user_menu {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.header .nav__logout {
+    font-size: clamp(0.5rem, 1.5vw, 0.9rem);
+    color: #bc2c1a;
+}
+
+.header .nav__ul {
+    display: flex;
+    justify-content: space-between;
+    gap: 51px;
+}
+
+.header .nav__ul-link {
+    font-weight: 400;
+    font-size: clamp(0.5rem, 1.5vw, 0.9rem);
+}
+
+.profile__box {
+    border: #6483f0 solid 2px;
+    border-radius: 40px;
+    display: flex;
+    min-height: 456px;
+    justify-content: space-between;
+    padding-right: 38px;
+    margin-bottom: 50px;
+}
+
+.profile__heading {
+    margin-left: 0;
+}
+
+.profile__img {
+    width: 100%;
+    max-width: 274px;
+    max-height: 274px;
+    border-radius: 40px;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.profile__form {
+    display: flex;
+    flex-direction: column;
+    max-width: 636px;
+    width: 100%;
+    padding: 13px 0;
+}
+
+.profile__form label {
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(0.5rem, 1.5vw, 1.2rem);
+    margin-bottom: 34px;
+}
+
+.profile__form input {
+    margin-top: 9px;
+    height: 55px;
+    background: #ffffff;
+    border: 1px solid #6483f0;
+    border-radius: 14px;
+}
+
+.profile__form .submit {
+    width: 100%;
+    background-color: #6483f0;
+    height: 55px;
+    border-radius: 8px;
+    color: white;
+}
+
+.logout_button {
+    width: 100%;
+    border: 2px solid #bc2c1a;
+    height: 55px;
+    border-radius: 8px;
+    color: #bc2c1a;
+}
+
+.profile__checkbox {
+    font-size: clamp(0.4rem, 0.97vw, 0.875rem);
+    font-weight: 200;
+}
+
+.profile__checkbox input {
+    height: initial;
+}
+
+.checkboxes {
+    display: flex;
+}
+
+.checkboxes_ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkboxes__label {
+    flex-direction: row !important;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.checkboxes__input {
+    margin: 0 !important;
+}
+
+.description {
+    color: #181818;
+    font-size: 1rem;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 164.188%;
+    max-width: 852px;
+}
+
+/*# sourceMappingURL=profile.css.map */

@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" csontent="width=device-width, initial-scale=1.0"/>
+    {% block tittle %}
+
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'vendor/css/reset.css' %}"/>
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="/" class="header__logo"
+                ><span class="header__logo-span">Mind</span>Mate</a
+                >
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="container">
+            <div class="main__inner">
+
+                {% block content %}
+
+                {% endblock %}
+
+            </div>
+        </div>
+    </main>
+</div>
+{% block js %}
+
+{% endblock %}
+</body>
+<script src="{% static "vendor/scripts/log_reg.js" %}"></script>
+</html>

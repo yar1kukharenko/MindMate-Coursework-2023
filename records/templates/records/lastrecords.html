@@ -1,0 +1,69 @@
+{% extends 'records/base.html' %}
+{% load static %}
+
+{% block tittle %}
+    <title>История консультаций</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/vendor/css/lastrecords.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+
+    <section class="therapies">
+        <div class="container">
+            <div class="therapies__inner inner">
+                <h1 class="therapies__heading heading">История консультаций</h1>
+                <div class="therapies__box box">
+                    <ul class="therapies__links">
+                        <li class="therapies__link "><a href="{% url 'index' %}">Мои терапии</a></li>
+                        <li class="therapies__link underline_link">
+                            <a href="">История консультаций</a>
+                        </li>
+                    </ul>
+                    <ul class="therapies__records">
+
+                        {% if user.user_type == 'CL' %}
+                            {% for record in client_records %}
+                                <li class="therapies__record">
+                                    <img class="therapies__record-icon" src="{{ record.therapist_photo.url }}" alt=""/>
+                                    <div class="therapies__record-box">
+                                        <div class="therapies__record-text">
+                                            <h2 class="therapies__record-name">{{ record.therapist.first_name }} {{ record.therapist.last_name }}</h2>
+                                            <p class="therapies__record-date">{{ record.date }}</p>
+                                            <p class="therapies__record-time">Длительность
+                                                приёма: {{ record.duration }}</p>
+                                        </div>
+                                        <div class="therapies__record-right">
+                                            <p class="therapies__record-price">{{ record.price }}₽</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        {% if user.user_type == 'TH' %}
+                            {% for record in therapist_records %}
+                                <li class="therapies__record">
+                                    <img class="therapies__record-icon" src="{% if record.therapist_photo %}{{ record.therapist_photo.url }}{% endif %}" alt=""/>
+                                    <div class="therapies__record-box">
+                                        <div class="therapies__record-text">
+                                            <h2 class="therapies__record-name">{{ record.therapist.first_name }} {{ record.therapist.last_name }}</h2>
+                                            <p class="therapies__record-date">{{ record.date }} {{ record.time }}</p>
+                                            <p class="therapies__record-time">Длительность
+                                                приёма: {{ record.duration }}</p>
+                                        </div>
+                                        <div class="therapies__record-right">
+                                            <p class="therapies__record-price">{{ record.price }}₽</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

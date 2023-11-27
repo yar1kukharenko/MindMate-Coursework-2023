@@ -1,0 +1,75 @@
+{% extends 'records/base.html' %}
+{% load static %}
+
+{% block tittle %}
+    <title>Профиль специалиста</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/vendor/css/therapists_profile.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+    <div class="profile__inner inner">
+        <div class="container">
+            <h1 class="profile__heading heading">{{ therapist.first_name }} {{ therapist.last_name }}</h1>
+            <div class="profile__box">
+                <div class="profile__top">
+                    <img style="object-fit: cover" src="{% if therapist.photo.url %}{{ therapist.photo.url }}{% endif %}" alt="" class="profile__img"/>
+                    <div class="description">
+                        {{ therapist.description }}
+                    </div>
+                </div>
+                <div class="profile_down">
+                    <p class="sub_heading">
+                        Методы, которые использует специалист:
+                    </p>
+                    <ul class="profile__ul">
+                        {% for method in therapist.methods.all %}
+                            <li class="profile__ul-item">
+                                <p class="profile__ul-p">{{ method }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <p class="sub_heading">
+                        Ощущения, которые прорабатывет специалист:
+                    </p>
+                    <ul class="profile__ul">
+                        {% for feeling in therapist.feelings.all %}
+                            <li class="profile__ul-item">
+                                <p class="profile__ul-p">{{ feeling }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <p class="sub_heading">Случаи, с которыми работает терапевт:</p>
+                    <ul class="profile__ul">
+                        {% for event in therapist.events.all %}
+                            <li class="profile__ul-item">
+                                <p class="profile__ul-p">{{ event }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <form class="profile__form" action="{% url 'record_update' %}" method="post">
+                        {% csrf_token %}
+                        <select required class="profile_form-select" name="record_id" id="record_id">
+                            {% for record in records %}
+                                {% if record.client == None %}
+                                    <option value="{{ record.id }}">{{ record.date }} {{ record.time }} {{ record.price }}₽ {{ record.duration }}
+                                        ч.
+                                    </option>
+                                {% else %}
+
+                                {% endif %}
+                            {% endfor %}
+
+                        </select>
+                        <button class="profile__form-submit" type="submit">
+                            Записаться
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

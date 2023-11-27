@@ -1,0 +1,127 @@
+{% extends 'records/base.html' %}
+{% load static %}
+{% block tittle %}
+    <title>Профиль</title>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'vendor/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if form.errors %}
+            <div class="message" id="message">
+                <button id="close-btn" class="close-btn">
+                    <img src="{% static 'vendor/img/cross_white.svg' %}" alt=""/>
+                </button>
+
+                {{ form.errors }}
+
+            </div>
+        {% endif %}
+        <div class="profile__inner inner">
+            <h1 class="profile__heading heading">Имя профиля: {{ user.username }}</h1>
+            <div class="profile__box">
+                <img src="{% if user.photo %}{{ user.photo.url }} {% endif %}" alt="" class="profile__img"/>
+                <form class="profile__form" action="{% url 'users:profile' %}" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="{{ form.first_name.id_for_label }}">
+                        Имя
+                        {{ form.first_name }}
+                    </label>
+                    <label for="{{ form.last_name.id_for_label }}">
+                        Фамилия
+                        {{ form.last_name }}
+                    </label>
+                    <label for="{{ form.email.id_for_label }}">
+                        Почта
+                        {{ form.email }}
+                    </label>
+                    {% if user.user_type == 'TH' %}
+                        <label for="{{ form.email.id_for_label }}">
+                            Описание
+                            {{ form.description }}
+                        </label>
+                    {% endif %}
+                    <label for="{{ form.photo.id_for_label }}">
+                        Фото
+                        {{ form.photo }}
+                    </label>
+                    {% if user.user_type == 'TH' %}
+                        <div class="checkboxes">
+                            <ul class="checkboxes_ul">
+                                <li class="therapists__item methods__checkbox">
+                                    <p>Выберите методы терапии, которые вы используете</p>
+                                </li>
+                                {% for checkbox in methods %}
+                                    <li class="therapists__item profile__checkbox">
+                                        <label class="checkboxes__label">
+                                            <input type="checkbox" name="methods"
+                                                   value="{{ checkbox.id }}"
+                                                   class="checkboxes__input"
+                                                    {% if checkbox.name in selected_methods %}
+                                                   checked
+                                                    {% endif %}/>
+                                            {{ checkbox.name }}
+
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="checkboxes_ul">
+                                <li class="therapists__item methods__checkbox">
+                                    <p>Выберите ощущения, которые вы прорабатываете</p>
+                                </li>
+                                {% for checkbox in feelings %}
+
+                                    <li class="therapists__item profile__checkbox">
+                                        <label class="checkboxes__label">
+                                            <input type="checkbox" name="feelings"
+                                                   value="{{ checkbox.id }}"
+                                                   class="checkboxes__input"
+                                                    {% if checkbox.name in selected_feelings %}
+                                                   checked
+                                                    {% endif %}/>
+                                            {{ checkbox.name }}
+
+
+                                        </label>
+
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="checkboxes_ul">
+                                <li class="therapists__item methods__checkbox">
+                                    <p>Выберите случаи, с которыми вы работаете</p>
+                                </li>
+                                {% for checkbox in events %}
+                                    <li class="therapists__item profile__checkbox">
+                                        <label class="checkboxes__label">
+                                            <input type="checkbox" name="events"
+                                                   value="{{ checkbox.id }}"
+                                                   class="checkboxes__input"
+                                                    {% if checkbox.name in selected_events %}
+                                                   checked
+                                                    {% endif %}/>
+                                            {{ checkbox.name }}
+
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <button class="submit" type="submit">Применить</button>
+                    <a style=" display: flex; align-items: center; justify-content: center"
+                       href="{% url 'users:logout' %}" class="logout_button" type="button">Выйти</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/scripts/log_reg.js' %}"></script>
+{% endblock %}

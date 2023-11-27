@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% block tittle %}
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="{% static '/vendor/css/reset.css' %}"/>
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="{% url 'index' %}" class="header__logo"><span class="header__logo-span">Mind</span>Mate</a>
+                <nav class="nav">
+                    <ul class="nav__ul">
+                        <li class="nav__ul-item">
+                            <a href="{% url 'index' %}" class="nav__ul-link"
+                            >Домашний экран</a
+                            >
+                        </li>
+                        {% if user.user_type == 'CL' %}
+                        <li class="nav__ul-item">
+                            <a href="{% url 'therapists' %}" class="nav__ul-link"
+                            >Все терапевты</a
+                            >
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="user_menu">
+                        <a href="{% url 'users:profile' %}" class="nav__account">{{ user.username }}</a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'admin:index' %}" class="nav__account">Админ панель</a>
+                        {% endif %}
+                        <a class="nav__logout" href="{% url 'users:logout' %}">выйти</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        {% block content %}
+
+        {% endblock %}
+    </main>
+</div>
+{% block js %}
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends 'records/base.html' %}
+{% load static %}
+
+{% block tittle %}
+    <title>{{ tittle }}</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/vendor/css/add_record.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <section class="add_record">
+        <div class="container">
+             {% if form.errors %}
+                    <div class="message" id="message">
+                        <button id="close-btn" class="close-btn">
+                            <img src="{% static 'vendor/img/cross_white.svg' %}" alt=""/>
+                        </button>
+
+                        {{ form.errors }}
+
+                    </div>
+                {% endif %}
+            <div class="add_record__inner">
+
+                <form action="{% url 'addrecord' %}" method="post" class="add_record__form">
+                    {% csrf_token %}
+                    <label class="add_record__label" for="{{ form.date.id_for_label }}">
+                        Введите дату терапии
+                        {{ form.date }}
+                    </label>
+                    <label class="add_record__label" for="{{ form.time.id_for_label }}">
+                        Введите время терапии
+                        {{ form.time }}
+                    </label>
+
+                    <label class="add_record__label" for="{{ form.duration.id_for_label }}">
+                        Введите длительность терапии
+                        {{ form.duration }}
+                    </label>
+                    <label class="add_record__label" for="{{ form.price.id_for_label }}">
+                        Введите цену (в рублях)
+                        {{ form.price }}
+                    </label>
+
+                    <button class="add_record__button" type="submit">
+                        Создать
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script src="{% static '/vendor/scripts/log_reg.js' %}"></script>
+{% endblock %}

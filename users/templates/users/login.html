@@ -1,0 +1,90 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block tittle %}
+    <title>Вход</title>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'vendor/css/style.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    {#    {% if messages or form.non_field_errors %}#}
+    {#        {% if form.non_field_errors %}#}
+    {#            <div class="message" id="message">#}
+    {#                <button id="close-btn" class="close-btn">#}
+    {#                    <img src="{% static 'vendor/img/cross_white.svg' %}" alt=""/>#}
+    {#                </button>#}
+    {#                <p>#}
+    {#                    {% if messages %}#}
+    {#                        {% for message in messages %}#}
+    {#                            {{ message }}#}
+    {#                        {% endfor %}#}
+    {#                    {% else %}#}
+    {#                        {{ form.non_field_errors }}#}
+    {#                    {% endif %}#}
+    {#                </p>#}
+    {#            </div>#}
+    {#        {% endif %}#}
+    {#    {% endif %}#}
+    {% if messages or form.non_field_errors %}
+        <div class="message {% if messages %}green{% endif %}" id="message">
+            <button id="close-btn" class="close-btn">
+                <img src="{% static 'vendor/img/cross_white.svg' %}" alt=""/>
+            </button>
+            <p>
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% else %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+
+
+            </p>
+        </div>
+
+    {% endif %}
+
+
+    <form action="{% url 'users:login' %}" method="post" class="main__form">
+        <fieldset>
+            <legend class="main__form-legend">Вход</legend>
+            {% csrf_token %}
+            <label for="{{ form.username.id_for_label }}">
+                Введите имя пользователя
+                {{ form.username }}
+            </label>
+            <label for="{{ form.password.id_for_label }}">
+                Введите пароль
+                {{ form.password }}
+            </label>
+
+
+            {#            <label class="form__radio" for="client">#}
+            {#                <input required name="userType" id="client" type="radio"/>#}
+            {#                Я клиент#}
+            {#            </label>#}
+            {#            <label class="form__radio" for="specialist">#}
+            {#                <input#}
+            {#                        required#}
+            {#                        name="userType"#}
+            {#                        id="specialist"#}
+            {#                        type="radio"#}
+            {#                />#}
+            {#                Я специалист#}
+            {#            </label>#}
+            <button type="submit" class="main__form-button button">
+                Подтвердить
+            </button>
+        </fieldset>
+    </form>
+    <p class="main__inner-p">
+        Нет аккаунта? <a href="{% url 'users:registration' %}">Регистрация</a>
+    </p>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

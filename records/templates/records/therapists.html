@@ -1,0 +1,150 @@
+{% extends 'records/base.html' %}
+{% load static %}
+
+{% block tittle %}
+    <title>{{ tittle }}</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/vendor/css/client_all.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <section class="therapists">
+        <div class="container">
+            <div class="therapists__inner inner">
+                <h1 class="therapists__heading heading">Терапевты</h1>
+                <div class="therapists__box box">
+                    <form method="GET" class="therapists__filter">
+                        <p class="therapists__filter-heading">Фильтры</p>
+                        <ul class="therapists__buttons">
+                            <li class="therapists__item methods-li">
+                                <p style="font-weight: 400" id="methods" class="therapists__button">
+                                    Методы терапии
+                                </p>
+                            </li>
+                            {% for method in methods %}
+                                <li class="therapists__item methods__checkbox">
+                                    <label for="methods">
+                                        <input
+                                                id="methods"
+                                                name="methods"
+                                                value="{{ method.name }}"
+                                                type="checkbox"
+                                                {% if method.name in selected_methods %} checked {% endif %}
+                                        />
+                                        {{ method.name }}</label
+                                    >
+                                </li>
+                            {% endfor %}
+                            <li class="therapists__item feelings-li">
+                                <p style="font-weight: 400" id="feelings" class="therapists__button">
+                                    Ощущения
+                                </p>
+                                {% for feeling in feelings %}
+                                    <li class="therapists__item methods__checkbox">
+                                        <label for="feelings">
+                                            <input
+                                                    id="feelings"
+                                                    name="feelings"
+                                                    value="{{ feeling.name }}"
+                                                    type="checkbox"
+                                                    {% if feeling.name in selected_feelings %} checked {% endif %}
+                                            />
+                                            {{ feeling.name }}</label
+                                        >
+                                    </li>
+                                {% endfor %}
+                            </li>
+                            <li class="therapists__item events-li">
+                                <p style="font-weight: 400" id="events" class="therapists__button">
+                                    События
+                                </p>
+                                {% for event in events %}
+                                    <li class="therapists__item methods__checkbox">
+                                        <label for="events">
+                                            <input
+                                                    id="events"
+                                                    name="events"
+                                                    value="{{ event.name }}"
+                                                    type="checkbox"
+                                                    {% if event.name in selected_events %} checked {% endif %}
+                                            />
+                                            {{ event.name }}</label
+                                        >
+                                    </li>
+                                {% endfor %}
+                            </li>
+
+                        </ul>
+                        <button class="therapists__apply">Подтвердить</button>
+                    </form>
+                    <div class="therapists__right">
+
+                        <div class="therapists__cards">
+                            {% for therapist in therapists %}
+                                <a href="{% url 'therapist_profile' therapist.id %}" class="therapists__card">
+
+                                    <img src="
+                                            {% if therapist.photo %}{{ therapist.photo.url }}{% endif %}"
+                                         alt="" class="therapists__card-img"/>
+
+
+                                    <div class="therapists__card-text">
+                                        <div class="therapists__card-text-top">
+                                            <p class="therapists__card-name">{{ therapist.first_name }} {{ therapist.last_name }}</p>
+                                            <!--                                            <p class="therapists__card-description">-->
+                                            <!--                                                Психолог, психотерапевт, коуч-->
+                                            <!--                                            </p>-->
+                                        </div>
+                                        <div class="therapists__card-text-bottom">
+                                            <p class="light">Ближайшее свободное время:</p>
+                                            <p class="therapists__card-time">
+                                                {% if therapist.next_record_price != None %}
+                                                    <time
+                                                            datetime="{{ therapist.next_record.isoformat }}"
+                                                    > {{ therapist.next_record }}
+                                                    </time
+                                                    >
+                                                {% else %} Неизвестно {% endif %}
+                                            </p>
+                                            <p class="light">Стоимость ближайшей консультации:</p>
+                                            <p class="therapists__card-price">
+                                                {% if therapist.next_record_price != None %}
+                                                    {{ therapist.next_record_price }}₽ {% else %}
+                                                    Неизвестно {% endif %} </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% empty %}
+                                <p>Специалисты не найдены</p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    <div class="pagination">
+    <span class="step-links">
+        {% if therapists.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ therapists.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ therapists.number }} из {{ therapists.paginator.num_pages }}.
+        </span>
+
+        {% if therapists.has_next %}
+            <a href="?page={{ therapists.next_page_number }}">следующая</a>
+            <a href="?page={{ therapists.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    {#    <script src="{% static 'vendor/scripts/client_all.js' %}"></script>#}
+{% endblock %}

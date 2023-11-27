@@ -1,0 +1,79 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block tittle %}
+    <title>Вход</title>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'vendor/css/register.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    {% if form.errors %}
+        <div class="message" id="message">
+            <button id="close-btn" class="close-btn">
+                <img src="{% static 'vendor/img/cross_white.svg' %}" alt=""/>
+            </button>
+
+                {{ form.errors }}
+
+        </div>
+    {% endif %}
+    <form action="{% url 'users:registration' %}" method="post" class="main__form">
+        {% csrf_token %}
+        <fieldset>
+            <legend class="main__form-legend">Регистрация</legend>
+            <label for="{{ form.username.id_for_label }}">
+                Введите имя пользователя
+                {{ form.username }}
+            </label>
+            <label for="{{ form.email.id_for_label }}">
+                Введите почту
+                {{ form.email }}
+            </label>
+            <label for="{{ form.first_name.id_for_label }}">
+                Введите имя
+                {{ form.first_name }}
+            </label>
+            <label for="{{ form.last_name_name.id_for_label }}">
+                Введите фамилию
+                {{ form.last_name }}
+            </label>
+            <label for="{{ form.password1.id_for_label }}">
+                Введите пароль
+                {{ form.password1 }}
+            </label>
+            <label for="{{ form.password2.id_for_label }}">
+                Повторите пароль
+                {{ form.password2 }}
+            </label>
+            {#            <label  for="{{ form.user_type.id_for_label }}">#}
+            {#                Кто вы?#}
+            {#                {{ form.user_type.0 }}#}
+            {##}
+            {#            </label>#}
+                {{ form.user_type }}
+            {#            <label class="form__radio" for="client">#}
+            {#                <input required name="userType" id="client" type="radio"/>#}
+            {#                Я клиент#}
+            {#            </label>#}
+            {#            <label class="form__radio" for="specialist">#}
+            {#                <input#}
+            {#                        required#}
+            {#                        name="userType"#}
+            {#                        id="specialist"#}
+            {#                        type="radio"#}
+            {#                />#}
+            {#                Я специалист#}
+            {#            </label>#}
+            <button type="submit" class="main__form-button button">
+                Подтвердить
+            </button>
+        </fieldset>
+    </form>
+    <p class="main__inner-p">Уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a></p>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

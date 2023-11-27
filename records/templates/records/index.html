@@ -1,0 +1,151 @@
+{% extends 'records/base.html' %}
+{% load static %}
+
+{% block tittle %}
+    <title>{{ tittle }}</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/vendor/css/client_home.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <section class="therapies">
+        <div class="container">
+            <div class="therapies__inner inner">
+                <div class="therapies__top">
+                    <h1 class="therapies__heading heading">Здравствуйте</h1>
+                    <form method="get" action="{% url 'index' %}">
+                        <input type="text" name="search" placeholder="Поиск по имени или фамилии">
+                        <select name="method">
+                            <option value="">Выберите метод</option>
+                            {% for method in methods %}
+                                <option value="{{ method.id }}">{{ method.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Поиск</button>
+                    </form>
+                    {% if user.user_type == 'TH' %}
+                        <a href="{% url 'addrecord' %}" class="therapies__top-button" type="button">
+                            Создать запись
+                        </a>
+                    {% endif %}
+
+                </div>
+                {#                <h1 class="therapies__heading heading">Здравствуйте</h1>#}
+                <div class="therapies__box box">
+                    <ul class="therapies__links">
+                        <li class="therapies__link underline_link"><a href="{% url 'index' %}">Мои терапии</a></li>
+                        <li class="therapies__link">
+                            <a href="{% url 'lastrecords' %}">История консультаций</a>
+                        </li>
+                    </ul>
+                    <ul class="therapies__records">
+                        {% if user.user_type == 'CL' %}
+                            {% for record in client_records %}
+                                <li class="therapies__record">
+                                    <img class="therapies__record-icon" src="
+                                            {% if record.therapist_photo %}{{ record.therapist_photo.url }}{% endif %}"
+                                         alt=""/>
+                                    <div class="therapies__record-box">
+                                        <div class="therapies__record-text">
+                                            <h2 class="therapies__record-name">
+                                                {{ record.therapist.first_name }} {{ record.therapist.last_name }}</h2>
+
+                                            <p class="therapies__record-date">{{ record.date }}</p>
+                                            <p class="therapies__record-time">Длительность
+                                                приёма: {{ record.duration }}</p>
+                                        </div>
+                                        <div class="therapies__record-right">
+                                            <p class="therapies__record-price">{{ record.price }}₽</p>
+                                            <a href="{% url 'cancel_record' record.id %}"
+                                               class="therapies__record-cancel"
+                                            >Отменить</a
+                                            >
+                                        </div>
+                                    </div>
+                                </li>
+
+                            {% endfor %}
+                        {% endif %}
+                        {% if user.user_type == 'TH' %}
+                            {% for record in therapist_records %}
+                                <li {% if record.client != None %} style=" border: 2px solid #679436 " {% endif %}
+                                                                   class="therapies__record">
+                                    <img class="therapies__record-icon" src="{{ record.therapist_photo.url }}"
+                                         alt=""/>
+                                    <div class="therapies__record-box">
+                                        <div class="therapies__record-text">
+                                            <h2 class="therapies__record-name">
+                                                {{ record.therapist.first_name }} {{ record.therapist.last_name }}</h2>
+                                            {#                                        <p class="therapies__record-week_day">Понедельник</p>#}
+                                            <p class="therapies__record-date">{{ record.date }} {{ record.time }}</p>
+                                            <p class="therapies__record-time">Длительность
+                                                приёма: {{ record.duration }} ч.</p>
+                                        </div>
+                                        <div class="therapies__record-right">
+                                            <p class="therapies__record-price">{{ record.price }}₽</p>
+                                            <a href="{% url 'cancel_record' record.id %}"
+                                               class="therapies__record-cancel"
+                                            >Отменить</a
+                                            >
+                                        </div>
+                                    </div>
+                                </li>
+
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#  <head>#}
+{#    <meta charset="UTF-8" />#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0" />#}
+{#    <title>Домашняя страницаd</title>#}
+{#    <link rel="stylesheet" href="{% static '/vendor/css/reset.css' %}" />#}
+{#  </head>#}
+{#  <body>#}
+{#    <div class="wrapper">#}
+{#      <header class="header">#}
+{#        <div class="container">#}
+{#          <div class="header__inner">#}
+{#            <a href="{% url 'index' %}" class="header__logo"><span class="header__logo-span">Mind</span>Mate</a>#}
+{#            <nav class="nav">#}
+{#              <ul class="nav__ul">#}
+{#                <li class="nav__ul-item">#}
+{#                  <a href="./client_home.html" class="nav__ul-link"#}
+{#                    >Домашний экран</a#}
+{#                  >#}
+{#                </li>#}
+{#                <li class="nav__ul-item">#}
+{#                  <a href="./client_all.html" class="nav__ul-link"#}
+{#                    >Все терапевты</a#}
+{#                  >#}
+{#                </li>#}
+{#              </ul>#}
+{#              <p class="nav__account">Nickname</p>#}
+{#            </nav>#}
+{#          </div>#}
+{#        </div>#}
+{#      </header>#}
+{#      <main class="main">#}
+{##}
+{#      </main>#}
+{#    </div>#}
+{#    <script src="{% static '/vendor/scripts/client_all.js' %}"></script>#}
+{#  </body>#}
+{#</html>#}
