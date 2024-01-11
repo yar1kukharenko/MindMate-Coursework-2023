@@ -45,9 +45,18 @@ class Feelings(models.Model):
 class Events(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
+    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    ratings_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
+    def update_rating(self, new_rating):
+        total_rating = self.average_rating * self.ratings_count
+        total_rating += new_rating
+        self.ratings_count += 1
+        self.average_rating = total_rating / self.ratings_count
+        self.save()
 
 
 class Therapist(models.Model):

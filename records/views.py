@@ -1,9 +1,14 @@
+import decimal
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import F
 from django.db.models import Q
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from django.urls import reverse
-from rest_framework import viewsets
+from django.utils import timezone
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -22,12 +27,16 @@ def index(request):
         therapist_records_next = therapist.get_records
     elif user.user_type == 'CL':
         client = Clients.objects.get(user=request.user)
-        client_records_next = client.get_next_records
+        # client_records_next = client.get_next_records
+        client_records = Records.objects.filter(
+            (Q(client__user=user) | Q(date__lt=timezone.now())) &
+            ~Q(status='Отменено')
+        )
 
     search_query = request.GET.get('search', '')
     selected_method_id = request.GET.get('method', '')
 
-    methods = Methods.objects.all()  # Предполагается, что у вас есть модель Methods
+    methods = Methods.objects.all()
 
     if search_query or selected_method_id:
         query = Q()
@@ -41,7 +50,7 @@ def index(request):
 
     context = {
         'tittle': 'Домашний экран',
-        'client_records': client_records_next,
+        'client_records': client_records,
         'therapist_records': therapist_records_next,
         'therapists': therapists,
         'methods': methods,
@@ -116,6 +125,26 @@ def therapists(request):
         if selected_methods:
             therapists = therapists.filter(methods__name__in=selected_methods).distinct()
 
+    selected_next_record_date = request.GET.get('next_record_date')
+    selected_next_record_price = request.GET.get('next_record_price')
+
+    if selected_next_record_date:
+        therapists = therapists.filter(
+            records_set__date__gte=datetime.strptime(selected_next_record_date, "%Y-%m-%d"),
+            records_set__date__lte=datetime.strptime(selected_next_record_date, "%Y-%m-%d") + timedelta(days=1)
+        ).distinct()
+
+    if selected_next_record_price:
+        price_range = selected_next_record_price.split('-')
+        if len(price_range) == 2:
+            min_price, max_price = map(decimal.Decimal, price_range)
+            therapists = therapists.annotate(
+                next_price=F('records_set__price')
+            ).filter(
+                next_price__gte=min_price,
+                next_price__lte=max_price
+            ).distinct()
+
     paginator = Paginator(therapists, 10)
     page = request.GET.get('page')
     therapists = paginator.get_page(page)
@@ -132,6 +161,8 @@ def therapists(request):
         'selected_events': selected_events,
         'selected_price': selected_price,
         'selected_date': selected_date,
+        'selected_next_record_date': selected_next_record_date,
+        'selected_next_price': selected_next_record_price
     }
 
     return render(request, 'records/therapists.html', context)
@@ -161,6 +192,23 @@ def record_update(request):
     return HttpResponseRedirect(reverse(index))
 
 
+@login_required(login_url='users/login/')
+def future_appointments_view(request, therapist_id):
+    therapist = Therapist.objects.get(id=therapist_id)
+
+    future_appointments = Records.objects.filter(
+        Q(therapist=therapist) &
+        Q(date__gt=timezone.now()) &
+        ~Q(status='Отменено')
+    ).distinct()
+
+    context = {
+        'future_appointments': future_appointments,
+    }
+
+    return render(request, 'records/future_appointments.html', context)
+
+
 class ClientsViewSet(viewsets.ModelViewSet):
     queryset = Clients.objects.all()
     serializer_class = ClientSerializer
@@ -174,3 +222,18 @@ class ClientsViewSet(viewsets.ModelViewSet):
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Events.objects.all()
     serializer_class = EventsSerializers
+
+    @action(methods=['POST'], detail=True)
+    def rate_event(self, request, pk=None):
+        event = self.get_object()
+        try:
+            new_rating = float(request.data.get('rating'))
+            if new_rating < 1 or new_rating > 5:
+                return Response({"message": "Rating must be between 1 and 5"}, status=status.HTTP_400_BAD_REQUEST)
+
+            event.update_rating(new_rating)
+            return Response({"message": "Event rated successfully", "average_rating": event.average_rating},
+                            status=status.HTTP_200_OK)
+
+        except (TypeError, ValueError):
+            return Response({"message": "Invalid rating"}, status=status.HTTP_400_BAD_REQUEST)
